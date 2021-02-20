@@ -1,5 +1,5 @@
 {
-  "name": "stream-ansi2svg",
+  "name": "ansi2svg",
   "version": "1.1.0",
   "description": "Stream to transform ANSI colors (like in terminal) to svg image",
   "main": "index.js",

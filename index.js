@@ -31,7 +31,7 @@ function getReplacer(opts) {
     });
 
     if (breakers.length && opts.remains > 0) {
-      res += "</tspan>".repeat(breakers.length)
+      res += "</tspan>".repeat(breakers.length);
     } 
 
     if (colors.length) {
@@ -49,7 +49,6 @@ function getReplacer(opts) {
         + "\">";
       opts.remains += 1;
     }
-
 
     return res;
   };
@@ -75,19 +74,22 @@ module.exports = function (opts) {
   function onChunk(buf, _, next) {
     const output = buf.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(rg, replacer).split("\n");
     const longestLine = output.reduce((a, v) => v.length > a.length ? v : a, "");
-    //const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${longestLine.length*8.1}px" height="${(output.length+1) * 16}px">${
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/>${
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${
+      longestLine.length*7
+    } ${
+      output.length * 16
+    }"><rect width="100%" height="100%" fill="black"/>${
       output.map((l, i) => {
         const line = l.replace(/^<\/tspan>/g, "");
         const needToClose = (line.match(/<tspan/g)?.length || 0)
           - (line.match(/<\/tspan/g)?.length || 0);
         let out = `<text x="0" dy="${i+1}em" fill="white">${line}${
           "</tspan>".repeat(Math.max(0, needToClose))
-        }</text>`
+        }</text>`;
         if (needToClose < 0)
           for (let i = 0; i < Math.abs(needToClose); i++)
             out = out.replace(/<\/tspan><\/text>/g, "</text>");
-        return out;
+        return out.replace(/</g, " <");
       }).join("\n")
     }`;
     this.push(svg);
