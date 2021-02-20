@@ -1,33 +1,35 @@
 {
-  "name": "stream-ansi2html",
+  "name": "stream-ansi2svg",
   "version": "1.1.0",
-  "description": "Stream to transform ANSI colors (like in terminal) to wrapped html",
+  "description": "Stream to transform ANSI colors (like in terminal) to svg image",
   "main": "index.js",
   "scripts": {
-    "test": "tape test"
+    "test": "tape test",
+    "lint": "eslint .",
+    "lintfix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/marinintim/ansi2html"
+    "url": "https://github.com/Rundik/ansi2svg"
   },
   "keywords": [
     "ansi",
     "colors",
     "stream",
-    "html"
+    "svg"
   ],
-  "author": "Marinin Tim <marinintim@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/marinintim/ansi2html/issues"
+    "url": "https://github.com/Rundik/ansi2svg/issues"
   },
-  "homepage": "https://github.com/marinintim/ansi2html",
-  "dependencies": {
-    "through2": "^2.0.1"
-  },
+  "homepage": "https://github.com/Rundik/ansi2svg",
   "devDependencies": {
     "bl": "^1.1.2",
+    "eslint": "^7.20.0",
     "readable-stream": "^1.1.14",
     "tape": "^4.5.1"
+  },
+  "dependencies": {
+    "through2": "^4.0.2"
   }
 }

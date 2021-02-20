@@ -1,85 +1,98 @@
-var through = require('through2')
-var styleByEscapeCode = require('./styleByEscapeCode.js')
+const through = require("through2");
+const styleByEscapeCode = require("./styleByEscapeCode.js");
 
 function inliner(style) {
-    return Object.keys(style).map(function(k) {
-	if (style[k]) {
-	    return k + ': ' + style[k] + ';'
-	}
-    }).join(' ')
+  return Object.keys(style).map(function (k) {
+    if (style[k]) {
+      return ` ${k}="${style[k]}`;
+    }
+  }).join(" ");
 }
 
 function classifier(style, prefix) {
-    return Object.keys(style).map(function(k) {
-	if (style[k]) {
-	    return prefix + k + '-' + style[k]
-	}
-    }).join(' ')
+  return Object.keys(style).map(function (k) {
+    if (style[k]) {
+      return prefix + k + "-" + style[k];
+    }
+  }).join(" ");
 }
 
 function getReplacer(opts) {
-    return function replaceColor(match, offset, str) {
-	var res = ""
-	var styles = match.slice(2, -1).split(';').map(styleByEscapeCode)
+  return function replaceColor(match) {
+    let res = "";
+    const styles = match.slice(2, -1).split(";").map(styleByEscapeCode);
 
-        var breakers = []
-        var colors = []
+    const breakers = [];
+    const colors = [];
 
-        styles.forEach(function(style) {
-            if (style.breaker) breakers.push(style)
-            else colors.push(style)
-        })
+    styles.forEach(function (style) {
+      if (style.breaker) breakers.push(style);
+      else colors.push(style);
+    });
 
-	if (breakers.length && opts.remains > 0) {
-	    res += "</span>".repeat(breakers.length)
-	    opts.remains -= breakers.length
-	}
+    if (breakers.length && opts.remains > 0) {
+      res += "</tspan>".repeat(breakers.length)
+    } 
 
-	if (colors.length) {
-            var color = colors.reduce(function(color, style) {
-                for (var k in style) {
-                    color[k] = style[k] || color[k]
-                }
-                return color
-            }, {})
+    if (colors.length) {
+      const color = colors.reduce(function (color, style) {
+        for (const k in style) {
+          color[k] = style[k] || color[k];
+        }
+        return color;
+      }, {});
 
-	    res += '<span ' +
-                (opts.style === 'inline'
-                 ? 'style="' + inliner(color)
-                 : 'class="' + classifier(color, opts.prefix))
-                + '">'
-	    opts.remains += 1
-	}
-
-	return res;
+      res += "<tspan" +
+        (opts.style === "inline"
+          ? inliner(color)
+          : " class=\"" + classifier(color, opts.prefix))
+        + "\">";
+      opts.remains += 1;
     }
+
+
+    return res;
+  };
 }
 
 
 
-module.exports = function(opts) {
-    var rg = new RegExp("\u001b\\[[0-9;]*m", 'g')
+module.exports = function (opts) {
+  const rg = new RegExp("\u001b\\[[0-9;]*m", "g");
 
-    opts = opts || {}
-    opts.style = opts.style === 'class' ? 'class' : 'inline'
-    opts.prefix = opts.prefix || 'ansi2html-'
-    opts.remains = 0
+  opts = opts || {};
+  opts.style = opts.style === "class" ? "class" : "inline";
+  opts.prefix = opts.prefix || "ansi2svg-";
+  opts.remains = 0;
 
-    var replacer = getReplacer(opts)
+  const replacer = getReplacer(opts);
 
+  function onEnd(done) {
+    this.push("</svg>");
+    done();
+  }
 
-    function onEnd(done) {
-	if (opts.remains) {
-	    this.push('</span>'.repeat(opts.remains))
-	    opts.remains = 0
-	}
-	done()
-    }
+  function onChunk(buf, _, next) {
+    const output = buf.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(rg, replacer).split("\n");
+    const longestLine = output.reduce((a, v) => v.length > a.length ? v : a, "");
+    //const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${longestLine.length*8.1}px" height="${(output.length+1) * 16}px">${
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/>${
+      output.map((l, i) => {
+        const line = l.replace(/^<\/tspan>/g, "");
+        const needToClose = (line.match(/<tspan/g)?.length || 0)
+          - (line.match(/<\/tspan/g)?.length || 0);
+        let out = `<text x="0" dy="${i+1}em" fill="white">${line}${
+          "</tspan>".repeat(Math.max(0, needToClose))
+        }</text>`
+        if (needToClose < 0)
+          for (let i = 0; i < Math.abs(needToClose); i++)
+            out = out.replace(/<\/tspan><\/text>/g, "</text>");
+        return out;
+      }).join("\n")
+    }`;
+    this.push(svg);
+    next();
+  }
 
-    function onChunk(buf, _, next) {
-	this.push(buf.toString().replace(rg, replacer))
-	next()
-    }
-
-    return through(onChunk, onEnd)
-}
+  return through(onChunk, onEnd);
+};
