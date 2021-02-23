@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-var ansi2html = require('./index')
+var ansi2svg = require('./index')
 
-process.stdin.pipe(ansi2html()).pipe(process.stdout)
+process.stdin.pipe(ansi2svg()).pipe(process.stdout)

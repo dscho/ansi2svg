@@ -2,6 +2,11 @@ const argv = require('minimist')(process.argv.slice(2));
 const fs = require("fs");
 const path = require("path");
 
+if (argv?.version) {
+  console.log(JSON.parse(fs.readFileSync(path.join(__dirname, "package.json")).toString()).version);
+  process.exit();
+}
+
 let starters;
 const startersPath = argv.colors || path.join(__dirname, "starters.json");
 try {
