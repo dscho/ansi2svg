@@ -1,0 +1,23 @@
+{
+  "1": { "font-weight": "bold" },
+  "3": { "font-variant": "italic" },
+  "4": { "text-decoration": "underline" },
+  "30": { "fill": "#002b36" },
+  "31": { "fill": "#cb4b16" },
+  "32": { "fill": "#586e75" },
+  "33": { "fill": "#657b83" },
+  "34": { "fill": "#839496" },
+  "35": { "fill": "magenta" },
+  "36": { "fill": "#93a1a1" },
+  "37": { "fill": "#fdf6e3" },
+  "90": { "fill": "gray" },
+  "40": { "background": "black" },
+  "41": { "background": "red" },
+  "42": { "background": "green" },
+  "43": { "background": "yellow" },
+  "45": { "background": "blue" },
+  "46": { "background": "cyan" },
+  "47": { "background": "white" },
+  "background": "#002b36",
+  "foreground": "#839496"
+}

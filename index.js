@@ -1,5 +1,30 @@
+const argv = require('minimist')(process.argv.slice(2));
+const fs = require("fs");
+const path = require("path");
+
+let starters;
+const startersPath = argv.colors || path.join(__dirname, "starters.json");
+try {
+  starters = JSON.parse(fs.readFileSync(startersPath).toString());
+} catch (err) {
+  starters = JSON.parse(fs.readFileSync(path.join(__dirname, "starters.json")).toString());
+}
+
+const styleByEscapeCodeSource = require("./styleByEscapeCode.js");
+const styleByEscapeCode = code => styleByEscapeCodeSource(code, starters);
+
+//if (argv.convert && argv.i) {
+  //let alacrTheme;
+  //try {
+    //alacrTheme = fs.readFileSync(argv.i).toString();
+  //} catch(_) {
+    //return "Path not valid";
+  //}
+  //console.log(alacrTheme);
+  //return;
+//}
+
 const through = require("through2");
-const styleByEscapeCode = require("./styleByEscapeCode.js");
 
 function inliner(style) {
   return Object.keys(style).map(function (k) {
@@ -78,12 +103,12 @@ module.exports = function (opts) {
       longestLine.length*7
     } ${
       output.length * 16
-    }"><rect width="100%" height="100%" fill="black"/>${
+    }"><rect width="100%" height="100%" fill="${starters?.background}"/>${
       output.map((l, i) => {
         const line = l.replace(/^<\/tspan>/g, "");
         const needToClose = (line.match(/<tspan/g)?.length || 0)
           - (line.match(/<\/tspan/g)?.length || 0);
-        let out = `<text x="0" dy="${i+1}em" fill="white">${line}${
+        let out = `<text x="0" dy="${i+1}em" fill="${starters?.foreground}">${line}${
           "</tspan>".repeat(Math.max(0, needToClose))
         }</text>`;
         if (needToClose < 0)

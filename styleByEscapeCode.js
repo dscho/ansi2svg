@@ -1,26 +1,4 @@
-var starters = {
-  1: { "font-weight": "bold" },
-  3: { "font-variant": "italic" },
-  4: { "text-decoration": "underline" },
-  30: { fill: "black" },
-  31: { fill: "red" },
-  32: { fill: "green" },
-  33: { fill: "yellow" },
-  34: { fill: "blue" },
-  35: { fill: "magenta" },
-  36: { fill: "cyan" },
-  37: { fill: "white" },
-  90: { fill: "gray" },
-  40: { background: "black" },
-  41: { background: "red" },
-  42: { background: "green" },
-  43: { background: "yellow" },
-  45: { background: "blue" },
-  46: { background: "cyan" },
-  47: { background: "white" },
-};
-
-var breakers = {
+const breakers = {
   22: { "font-weight": "normal" },
   23: { "font-variant": "italic" },
   24: { "text-decoration": "none" },
@@ -28,9 +6,9 @@ var breakers = {
   49: { background: "inherit" }
 };
 
-var styleByEscapeCode = function(code) {
+const styleByEscapeCode = (code, starters) => {
   code = +code;
-  var style = starters[code];
+  let style = starters[code];
 
   if (!style) {
     style = breakers[code];

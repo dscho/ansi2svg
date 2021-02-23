@@ -1,6 +1,6 @@
 {
   "name": "ansi2svg",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Stream to transform ANSI colors (like in terminal) to svg image",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "tape": "^4.5.1"
   },
   "dependencies": {
+    "minimist": "^1.2.5",
     "through2": "^4.0.2"
   }
 }
