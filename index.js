@@ -1,4 +1,4 @@
-const argv = require('minimist')(process.argv.slice(2));
+const argv = require("minimist")(process.argv.slice(2));
 const fs = require("fs");
 const path = require("path");
 
@@ -17,17 +17,6 @@ try {
 
 const styleByEscapeCodeSource = require("./styleByEscapeCode.js");
 const styleByEscapeCode = code => styleByEscapeCodeSource(code, starters);
-
-//if (argv.convert && argv.i) {
-  //let alacrTheme;
-  //try {
-    //alacrTheme = fs.readFileSync(argv.i).toString();
-  //} catch(_) {
-    //return "Path not valid";
-  //}
-  //console.log(alacrTheme);
-  //return;
-//}
 
 const through = require("through2");
 
