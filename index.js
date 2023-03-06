@@ -108,7 +108,7 @@ module.exports = function (opts) {
         const line = l.replace(/^<\/tspan>/g, "");
         const needToClose = (line.match(/<tspan/g)?.length || 0)
           - (line.match(/<\/tspan/g)?.length || 0);
-        let out = `<text x="0" dy="${i+1}em" fill="${starters?.foreground}">${line}${
+        let out = `<text x="0" dy="${i+1}em" style="font-size: 12pt; font-family: monospace;" fill="${starters?.foreground}">${line}${
           "</tspan>".repeat(Math.max(0, needToClose))
         }</text>`;
         if (needToClose < 0)
