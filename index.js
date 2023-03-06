@@ -45,8 +45,13 @@ function getReplacer(opts) {
     const colors = [];
 
     styles.forEach(function (style) {
-      if (style.breaker) breakers.push(style);
-      else colors.push(style);
+      if (!style.breaker) {
+        colors.push(style);
+        this.needsBreaker = true;
+      } else if (this.needsBreaker) {
+        breakers.push(style);
+        this.needsBreaker = false;
+      }
     });
 
     if (breakers.length && opts.remains > 0) {
