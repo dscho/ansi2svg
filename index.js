@@ -98,9 +98,9 @@ module.exports = function (opts) {
 
   function onChunk(buf, _, next) {
     const output = buf.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(rg, replacer).split("\n");
-    const longestLine = output.reduce((a, v) => v.length > a.length ? v : a, "");
+    const longestLineLength = output.reduce((longest, v) => Math.max(v.length, longest), 0);
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${
-      longestLine.length*7
+      longestLineLength * 7
     } ${
       output.length * 16
     }"><rect width="100%" height="100%" fill="${starters?.background}"/>${
