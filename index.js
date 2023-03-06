@@ -25,7 +25,7 @@ function inliner(style) {
     if (style[k]) {
       return ` ${k}="${style[k]}`;
     }
-  }).join(" ");
+  }).join("\" ");
 }
 
 function classifier(style, prefix) {
