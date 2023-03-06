@@ -76,6 +76,7 @@ function getReplacer(opts) {
 
 
 module.exports = function (opts) {
+  // eslint-disable-next-line no-control-regex
   const rg = new RegExp("\u001b\\[[0-9;]*m", "g");
 
   opts = opts || {};
