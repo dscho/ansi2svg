@@ -1,4 +1,8 @@
 #!/usr/bin/env node
 var ansi2svg = require('./index')
+const fs = require('fs')
 
-process.stdin.pipe(ansi2svg()).pipe(process.stdout)
+const out = process.env.ANSI2SVG_OUTPUT_FILE
+  ? fs.createWriteStream(process.env.ANSI2SVG_OUTPUT_FILE)
+  : process.stdout
+process.stdin.pipe(ansi2svg()).pipe(out)
