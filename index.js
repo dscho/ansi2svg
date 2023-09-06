@@ -56,7 +56,7 @@ function getReplacer(opts) {
 
     if (breakers.length && opts.remains > 0) {
       res += "</tspan>".repeat(breakers.length);
-    } 
+    }
 
     if (colors.length) {
       const color = colors.reduce(function (color, style) {

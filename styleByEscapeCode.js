@@ -14,7 +14,7 @@ const styleByEscapeCode = (code, starters) => {
     style = breakers[code];
     if (style) style.breaker = true;
   }
-    
+
   if (!style) {
     style = { breaker: true };
   }
