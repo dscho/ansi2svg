@@ -1,8 +1,16 @@
 #!/usr/bin/env node
-var ansi2svg = require('./index')
+
+if (process.argv.length === 3 && process.argv[2] === '--version') {
+  console.log(JSON.parse(fs.readFileSync(path.join(__dirname, "package.json")).toString()).version);
+  process.exit();
+}
+
+const opts = { colors: process.env.ANSI2SVG_COLORS_FILE }
+
+const ansi2svg = require('./index')
 const fs = require('fs')
 
 const out = process.env.ANSI2SVG_OUTPUT_FILE
   ? fs.createWriteStream(process.env.ANSI2SVG_OUTPUT_FILE)
   : process.stdout
-process.stdin.pipe(ansi2svg()).pipe(out)
+process.stdin.pipe(ansi2svg(opts)).pipe(out)

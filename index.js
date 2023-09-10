@@ -1,19 +1,7 @@
-const argv = require("minimist")(process.argv.slice(2));
 const fs = require("fs");
 const path = require("path");
 
-if (argv?.version) {
-  console.log(JSON.parse(fs.readFileSync(path.join(__dirname, "package.json")).toString()).version);
-  process.exit();
-}
-
 let starters;
-const startersPath = argv.colors || path.join(__dirname, "starters.json");
-try {
-  starters = JSON.parse(fs.readFileSync(startersPath).toString());
-} catch (err) {
-  starters = JSON.parse(fs.readFileSync(path.join(__dirname, "starters.json")).toString());
-}
 
 const styleByEscapeCodeSource = require("./styleByEscapeCode.js");
 const styleByEscapeCode = code => styleByEscapeCodeSource(code, starters);
@@ -81,6 +69,13 @@ function getReplacer(opts) {
 
 
 module.exports = function (opts) {
+  const startersPath = opts?.colors || path.join(__dirname, "starters.json");
+  try {
+    starters = JSON.parse(fs.readFileSync(startersPath).toString());
+  } catch (err) {
+    starters = JSON.parse(fs.readFileSync(path.join(__dirname, "starters.json")).toString());
+  }
+
   // eslint-disable-next-line no-control-regex
   const rg = new RegExp("\u001b\\[[0-9;]*m", "g");
 
