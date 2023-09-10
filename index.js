@@ -95,7 +95,8 @@ module.exports = function (opts) {
 
   function onEnd(done) {
     const output = Buffer.concat(chunks).toString()
-      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(rg, replacer).split("\n");
+      .replace(/&/g, '&amp;').replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(rg, replacer).split("\n");
     const longestLineLength = output.reduce((longest, v) => Math.max(v.replace(/<[^>]*>/g, '').replace(/&[a-z]*;/g, '.').length, longest), 0);
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${
       longestLineLength * 8.8
