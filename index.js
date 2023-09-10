@@ -101,12 +101,12 @@ module.exports = function (opts) {
       longestLineLength * 8.8
     } ${
       output.length * 15.8
-    }"><rect width="100%" height="100%" fill="${starters?.background}"/>${
+    }"><style>text { white-space: pre; font-size: 12pt; font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace; }</style><rect width="100%" height="100%" fill="${starters?.background}"/>${
       output.map((l, i) => {
         const line = l.replace(/^<\/tspan>/g, "");
         const needToClose = (line.match(/<tspan/g)?.length || 0)
           - (line.match(/<\/tspan/g)?.length || 0);
-        let out = `<text xml:space="preserve" x="0" dy="${i+1}em" style="font-size: 12pt; font-family: monospace;" fill="${starters?.foreground}">${line}${
+        let out = `<text x="0" dy="${i+1}em" fill="${starters?.foreground}">${line}${
           "</tspan>".repeat(Math.max(0, needToClose))
         }</text>`;
         if (needToClose < 0)
